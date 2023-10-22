@@ -5,7 +5,21 @@
       label="Object"
       onchange={handleObjectSelect}
     ></lightning-combobox>
-    <!-- <lightning-datatable key-field="id" data={fields} columns={columns}>
-    </lightning-datatable> -->
+
+    <template for:each={fields} for:item="item">
+      <div class="slds-grid" key={item.key}>
+        <div class="slds-col">
+          <p style="padding-bottom: 1rem">{item.key}</p>
+        </div>
+        <div class="slds-col">
+          <lightning-combobox
+            data-key={item.key}
+            options={typeOptions}
+            label="data type"
+            onchange={handleTypeSelect}
+          ></lightning-combobox>
+        </div>
+      </div>
+    </template>
   </lightning-card>
 </template>

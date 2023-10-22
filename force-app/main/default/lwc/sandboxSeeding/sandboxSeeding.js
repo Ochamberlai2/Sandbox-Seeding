@@ -23,12 +23,32 @@ export default class SandboxSeeding extends LightningElement {
   selectedObject = "Account";
   @wire(getFields, { selectedObject: "$selectedObject" })
   fieldsWire({ data, error }) {
-    this.fields = { data, error };
-    console.log(JSON.parse(JSON.stringify(this.fields?.data)));
+    this.fields = [];
+    if (data) {
+      data.forEach((field) => {
+        this.fields.push({
+          key: field
+        });
+      });
+    }
   }
   fields;
+  typeOptions = [
+    { label: "Name", value: "Name" },
+    { label: "Date", value: "Date" },
+    { label: "Number", value: "Number" },
+    { label: "Text Value", value: "TextValue" },
+    { label: "Specific Value", value: "SpecificValue" }
+  ];
 
   handleObjectSelect(event) {
     this.selectedObject = event.target.value;
+  }
+
+  handleTypeSelect(event) {
+    const field = this.fields.find(event.target.dataset.key);
+    if (field) {
+      field.type = event.target.dataset.key;
+    }
   }
 }
