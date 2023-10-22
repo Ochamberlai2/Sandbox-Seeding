@@ -1,6 +1,8 @@
 import { LightningElement, wire } from "lwc";
 import getObjects from "@salesforce/apex/SandboxSeedingUtil.getObjects";
 import getFields from "@salesforce/apex/SandboxSeedingUtil.getFields";
+import seedSandbox from "@salesforce/apex/SandboxSeedingUtil.seedSandbox";
+import insertSeedingTemplate from "@salesforce/apex/CustomMetadataUtil.insertSeedingTemplate";
 
 export default class SandboxSeeding extends LightningElement {
   @wire(getObjects)
@@ -20,7 +22,7 @@ export default class SandboxSeeding extends LightningElement {
   }
   objects;
   objectsOptions;
-  selectedObject = "Account";
+  selectedObject;
   @wire(getFields, { selectedObject: "$selectedObject" })
   fieldsWire({ data, error }) {
     this.fields = [];
@@ -34,7 +36,9 @@ export default class SandboxSeeding extends LightningElement {
   }
   fields;
   typeOptions = [
-    { label: "Name", value: "Name" },
+    { label: "Company Name", value: "CompanyName" },
+    { label: "First Name", value: "FirstName" },
+    { label: "Last Name", value: "LastName" },
     { label: "Date", value: "Date" },
     { label: "Number", value: "Number" },
     { label: "Text Value", value: "TextValue" },
@@ -46,9 +50,32 @@ export default class SandboxSeeding extends LightningElement {
   }
 
   handleTypeSelect(event) {
-    const field = this.fields.find(event.target.dataset.key);
+    const field = this.fields.find(
+      (fieldObject) => event.target.dataset.key === fieldObject.key
+    );
     if (field) {
-      field.type = event.target.dataset.key;
+      field.type = event.target.value;
+    }
+  }
+  createObjectTemplate() {
+    const populatedFields = this.fields.filter(
+      (field) => field.type !== undefined
+    );
+    const stringifiedFields = JSON.stringify(populatedFields);
+
+    insertSeedingTemplate({
+      seedingTemplate: {
+        Label: this.selectedObject,
+        MasterLabel: this.selectedObject,
+        Object_Shape__c: stringifiedFields
+      }
+    });
+  }
+  seedSandbox() {
+    try {
+      seedSandbox();
+    } catch (error) {
+      console.error(error);
     }
   }
 }

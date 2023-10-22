@@ -1,18 +1,35 @@
 <template>
   <lightning-card title="Seed a sandbox">
+    <span slot="actions">
+      <lightning-button
+        variant="brand"
+        label="Create object template"
+        onclick={createObjectTemplate}
+      ></lightning-button>
+      <lightning-button
+        variant="brand"
+        label="Seed sandbox"
+        onclick={seedSandbox}
+      ></lightning-button>
+    </span>
     <lightning-combobox
       options={objectsOptions}
       label="Object"
       onchange={handleObjectSelect}
+      value={selectedObject}
     ></lightning-combobox>
 
     <template for:each={fields} for:item="item">
-      <div class="slds-grid" key={item.key}>
-        <div class="slds-col">
+      <div
+        class="slds-grid slds-gutters slds-var-m-around_medium"
+        key={item.key}
+      >
+        <div class="slds-col slds-size_1-of-4">
           <p style="padding-bottom: 1rem">{item.key}</p>
         </div>
-        <div class="slds-col">
+        <div class="slds-col slds-size_3-of-4">
           <lightning-combobox
+            variant="label-hidden"
             data-key={item.key}
             options={typeOptions}
             label="data type"
