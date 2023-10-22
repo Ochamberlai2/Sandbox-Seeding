@@ -35,6 +35,8 @@ export default class SandboxSeeding extends LightningElement {
     }
   }
   fields;
+  templateName;
+  numberOfRecords;
   typeOptions = [
     { label: "Company Name", value: "CompanyName" },
     { label: "First Name", value: "FirstName" },
@@ -57,6 +59,12 @@ export default class SandboxSeeding extends LightningElement {
       field.type = event.target.value;
     }
   }
+  handleTemplateNameChange(event) {
+    this.templateName = event.target.value;
+  }
+  handleNumberRecordsChange(event) {
+    this.numberOfRecords = event.target.value;
+  }
   createObjectTemplate() {
     const populatedFields = this.fields.filter(
       (field) => field.type !== undefined
@@ -65,11 +73,11 @@ export default class SandboxSeeding extends LightningElement {
 
     insertSeedingTemplate({
       seedingTemplate: {
-        Label: this.selectedObject,
-        MasterLabel: this.selectedObject,
+        Label: this.templateName,
+        MasterLabel: this.templateName,
         Object_Shape__c: stringifiedFields,
         Object_Api_Name__c: this.selectedObject,
-        Number_of_records__c: 1
+        Number_of_records__c: this.numberOfRecords
       }
     });
   }

@@ -123,63 +123,65 @@ public with sharing class SandboxSeedingUtil {
         if (template.Object_Shape__c == null) {
           continue;
         }
-        SObject objectToCreate = Schema.getGlobalDescribe()
-          .get(template.Object_Api_Name__c)
-          .newSObject();
-        objectsToCreate.add(objectToCreate);
-        List<SandboxSeedingUtil.SeedingTemplateField> fields = (List<SandboxSeedingUtil.SeedingTemplateField>) JSON.deserialize(
-          template.Object_Shape__c,
-          List<SandboxSeedingUtil.SeedingTemplateField>.class
-        );
-        if (fields.isEmpty()) {
-          continue;
-        }
-        for (SandboxSeedingUtil.SeedingTemplateField field : fields) {
-          switch on field.type {
-            when 'CompanyName' {
-              objectToCreate.put(
-                field.key,
-                COMPANY_NAMES[
-                  Integer.valueOf(
-                    Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                  )
-                ]
-              );
-            }
-            when 'FirstName' {
-              objectToCreate.put(
-                field.key,
-                FIRST_NAMES[
-                  Integer.valueOf(
-                    Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                  )
-                ]
-              );
-            }
-            when 'LastName' {
-              objectToCreate.put(
-                field.key,
-                FIRST_NAMES[
-                  Integer.valueOf(
-                    Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                  )
-                ]
-              );
-            }
-            when 'Date' {
-              objectToCreate.put(field.key, Date.today());
-            }
-            when 'Number' {
-              objectToCreate.put(
-                field.key,
-                Math.floor(Math.random() * (10000) + 1)
-              );
-            }
-            when 'SpecificValue' {
-            }
-            when else {
-              //Assume text
-              objectToCreate.put(field.key, 'Example Text');
+        for (Integer i = 0; i < template.Number_of_Records__c; i++) {
+          SObject objectToCreate = Schema.getGlobalDescribe()
+            .get(template.Object_Api_Name__c)
+            .newSObject();
+          objectsToCreate.add(objectToCreate);
+          List<SandboxSeedingUtil.SeedingTemplateField> fields = (List<SandboxSeedingUtil.SeedingTemplateField>) JSON.deserialize(
+            template.Object_Shape__c,
+            List<SandboxSeedingUtil.SeedingTemplateField>.class
+          );
+          if (fields.isEmpty()) {
+            continue;
+          }
+          for (SandboxSeedingUtil.SeedingTemplateField field : fields) {
+            switch on field.type {
+              when 'CompanyName' {
+                objectToCreate.put(
+                  field.key,
+                  COMPANY_NAMES[
+                    Integer.valueOf(
+                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
+                    )
+                  ]
+                );
+              }
+              when 'FirstName' {
+                objectToCreate.put(
+                  field.key,
+                  FIRST_NAMES[
+                    Integer.valueOf(
+                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
+                    )
+                  ]
+                );
+              }
+              when 'LastName' {
+                objectToCreate.put(
+                  field.key,
+                  FIRST_NAMES[
+                    Integer.valueOf(
+                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
+                    )
+                  ]
+                );
+              }
+              when 'Date' {
+                objectToCreate.put(field.key, Date.today());
+              }
+              when 'Number' {
+                objectToCreate.put(
+                  field.key,
+                  Math.floor(Math.random() * (10000) + 1)
+                );
+              }
+              when 'SpecificValue' {
+              }
+              when else {
+                //Assume text
+                objectToCreate.put(field.key, 'Example Text');
+              }
             }
           }
         }

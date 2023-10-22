@@ -19,11 +19,18 @@ public with sharing class CustomMetadataUtil implements Metadata.DeployCallback 
     Metadata.CustomMetadata customMetadata = new Metadata.CustomMetadata();
     customMetadata.fullName = 'Seeding_Template__mdt.' + seedingTemplate.Label;
     customMetadata.label = seedingTemplate.Label;
-    Metadata.CustomMetadataValue customField = new Metadata.CustomMetadataValue();
-    customField.field = 'Object_Shape__c';
-    customField.value = seedingTemplate.Object_Shape__c;
-
-    customMetadata.values.add(customField);
+    Metadata.CustomMetadataValue objectShape = new Metadata.CustomMetadataValue();
+    objectShape.field = 'Object_Shape__c';
+    objectShape.value = seedingTemplate.Object_Shape__c;
+    customMetadata.values.add(objectShape);
+    Metadata.CustomMetadataValue objectName = new Metadata.CustomMetadataValue();
+    objectName.field = 'Object_Api_Name__c';
+    objectName.value = seedingTemplate.Object_Api_Name__c;
+    customMetadata.values.add(objectName);
+    Metadata.CustomMetadataValue numRecords = new Metadata.CustomMetadataValue();
+    numRecords.field = 'Number_of_records__c';
+    numRecords.value = seedingTemplate.Number_of_records__c;
+    customMetadata.values.add(numRecords);
 
     //    Metadata.CustomMetadataValue labelField = new Metadata.CustomMetadataValue();
     //    labelField.field = 'MasterLabel';
