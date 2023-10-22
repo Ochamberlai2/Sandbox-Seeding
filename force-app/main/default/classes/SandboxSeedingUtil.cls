@@ -107,7 +107,12 @@ public with sharing class SandboxSeedingUtil {
   public static void seedSandbox() {
     try {
       List<Seeding_Template__mdt> templates = [
-        SELECT Id, Label, Object_Shape__c
+        SELECT
+          Id,
+          Label,
+          Object_Shape__c,
+          Number_of_Records__c,
+          Object_Api_Name__c
         FROM Seeding_Template__mdt
       ];
       if (templates.isEmpty()) {
@@ -119,7 +124,7 @@ public with sharing class SandboxSeedingUtil {
           continue;
         }
         SObject objectToCreate = Schema.getGlobalDescribe()
-          .get(template.Label)
+          .get(template.Object_Api_Name__c)
           .newSObject();
         objectsToCreate.add(objectToCreate);
         List<SandboxSeedingUtil.SeedingTemplateField> fields = (List<SandboxSeedingUtil.SeedingTemplateField>) JSON.deserialize(

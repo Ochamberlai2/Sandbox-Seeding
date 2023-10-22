@@ -67,7 +67,9 @@ export default class SandboxSeeding extends LightningElement {
       seedingTemplate: {
         Label: this.selectedObject,
         MasterLabel: this.selectedObject,
-        Object_Shape__c: stringifiedFields
+        Object_Shape__c: stringifiedFields,
+        Object_Api_Name__c: this.selectedObject,
+        Number_of_records__c: 1
       }
     });
   }
