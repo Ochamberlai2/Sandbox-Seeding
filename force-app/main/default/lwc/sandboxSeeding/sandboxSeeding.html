@@ -52,6 +52,15 @@
             label="data type"
             onchange={handleTypeSelect}
           ></lightning-combobox>
+          <template lwc:if={item.isSpecific}>
+            <lightning-input
+              class="slds-var-m-top_small"
+              label="Specific value"
+              variant="label-hidden"
+              data-key={item.key}
+              onchange={handleSpecificValueChange}
+            ></lightning-input>
+          </template>
         </div>
       </div>
     </template>

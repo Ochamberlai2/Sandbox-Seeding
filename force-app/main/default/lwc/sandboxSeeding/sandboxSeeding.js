@@ -1,4 +1,4 @@
-import { LightningElement, wire } from "lwc";
+import { LightningElement, wire, track } from "lwc";
 import getObjects from "@salesforce/apex/SandboxSeedingUtil.getObjects";
 import getFields from "@salesforce/apex/SandboxSeedingUtil.getFields";
 import seedSandbox from "@salesforce/apex/SandboxSeedingUtil.seedSandbox";
@@ -34,6 +34,7 @@ export default class SandboxSeeding extends LightningElement {
       });
     }
   }
+  @track
   fields;
   templateName;
   numberOfRecords;
@@ -44,7 +45,8 @@ export default class SandboxSeeding extends LightningElement {
     { label: "Date", value: "Date" },
     { label: "Number", value: "Number" },
     { label: "Text Value", value: "TextValue" },
-    { label: "Specific Value", value: "SpecificValue" }
+    { label: "Specific Value", value: "SpecificValue" },
+    { label: "--None--", value: "" }
   ];
 
   handleObjectSelect(event) {
@@ -57,6 +59,7 @@ export default class SandboxSeeding extends LightningElement {
     );
     if (field) {
       field.type = event.target.value;
+      field.isSpecific = event.target.value === "SpecificValue";
     }
   }
   handleTemplateNameChange(event) {
@@ -64,6 +67,14 @@ export default class SandboxSeeding extends LightningElement {
   }
   handleNumberRecordsChange(event) {
     this.numberOfRecords = event.target.value;
+  }
+  handleSpecificValueChange(event) {
+    const field = this.fields.find(
+      (fieldObject) => event.target.dataset.key === fieldObject.key
+    );
+    if (field) {
+      field.specificValue = event.target.value;
+    }
   }
   createObjectTemplate() {
     const populatedFields = this.fields.filter(

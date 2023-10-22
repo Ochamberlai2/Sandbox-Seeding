@@ -177,6 +177,7 @@ public with sharing class SandboxSeedingUtil {
                 );
               }
               when 'SpecificValue' {
+                objectsToCreate.put(field.key, field.specificValue);
               }
               when else {
                 //Assume text
@@ -195,10 +196,12 @@ public with sharing class SandboxSeedingUtil {
   public class SeedingTemplateField {
     public String type;
     public String key;
+    public String specificValue;
 
-    SeedingTemplateField(String type, String key) {
+    SeedingTemplateField(String type, String key, String specificValue) {
       this.type = type;
       this.key = key;
+      this.specificValue = specificValue;
     }
   }
 }
