@@ -1,0 +1,47 @@
+<template>
+  <template lwc:if={hasFields}>
+    <article class="field-parent">
+      <template for:each={fields} for:item="item">
+        <div
+          class="slds-grid slds-gutters slds-var-m-around_medium"
+          key={item.key}
+        >
+          <div class="slds-col slds-size_1-of-4">
+            <p style="padding-bottom: 1rem">{item.key}</p>
+          </div>
+          <div class="slds-col slds-size_3-of-4">
+            <lightning-combobox
+              variant="label-hidden"
+              data-key={item.key}
+              options={typeOptions}
+              label="data type"
+              onchange={handleTypeSelect}
+            ></lightning-combobox>
+            <template lwc:if={item.isSpecific}>
+              <lightning-input
+                class="slds-var-m-top_small"
+                label="Specific value"
+                variant="label-hidden"
+                data-key={item.key}
+                onchange={handleSpecificValueChange}
+              ></lightning-input>
+            </template>
+            <template lwc:if={item.hasObjectName}>
+              <div class="slds-var-m-top_xx-small">
+                <lightning-button
+                  variant="brand"
+                  label="Configure"
+                  data-key={item.key}
+                  onclick={handleConfigureLookupModalClick}
+                ></lightning-button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </article>
+  </template>
+  <template lwc:else>
+    <c-illustration></c-illustration>
+  </template>
+</template>

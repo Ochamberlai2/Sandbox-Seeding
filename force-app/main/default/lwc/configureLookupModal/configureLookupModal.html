@@ -1,0 +1,14 @@
+<template>
+  <lightning-modal-header
+    label="Configure lookup field"
+  ></lightning-modal-header>
+  <lightning-modal-body>
+    <c-field-list
+      selected-object={selectedObject}
+      onfieldchange={handleFieldChange}
+    ></c-field-list>
+  </lightning-modal-body>
+  <lightning-modal-footer
+    ><lightning-button label="Okay" onclick={handleOkay}></lightning-button
+  ></lightning-modal-footer>
+</template>

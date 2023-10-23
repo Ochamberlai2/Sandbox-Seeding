@@ -104,6 +104,26 @@ public with sharing class SandboxSeedingUtil {
   }
 
   @AuraEnabled
+  public static string getObjectNameFromLookup(
+    String objectName,
+    String fieldName
+  ) {
+    try {
+      Schema.DescribeFieldResult fieldDescribe = Schema.getGlobalDescribe()
+        .get(objectName)
+        .getDescribe()
+        .fields
+        .getMap()
+        .get(fieldName)
+        .getDescribe();
+
+      return fieldDescribe.getReferenceTo()[0].getDescribe().getName();
+    } catch (Exception e) {
+      throw new AuraHandledException(e.getMessage());
+    }
+  }
+
+  @AuraEnabled
   public static void seedSandbox() {
     try {
       List<Seeding_Template__mdt> templates = [
@@ -177,7 +197,7 @@ public with sharing class SandboxSeedingUtil {
                 );
               }
               when 'SpecificValue' {
-                objectsToCreate.put(field.key, field.specificValue);
+                objectToCreate.put(field.key, field.specificValue);
               }
               when else {
                 //Assume text

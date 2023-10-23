@@ -1,0 +1,4 @@
+.field-parent {
+  overflow-y: auto;
+  max-height: 45dvh;
+}

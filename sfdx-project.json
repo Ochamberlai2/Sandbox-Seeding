@@ -6,7 +6,7 @@
     }
   ],
   "name": "Sandbox-Seeding",
-  "namespace": "",
+  "namespace": "OC_SandboxSeeding",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0"
 }
