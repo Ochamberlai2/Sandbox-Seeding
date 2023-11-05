@@ -8,6 +8,8 @@ import configureLookupModal from "c/configureLookupModal";
 export default class FieldList extends LightningElement {
   @api
   selectedObject;
+  @api
+  defaultFields;
   @track
   fields;
   templateName;
@@ -29,8 +31,13 @@ export default class FieldList extends LightningElement {
     this.fields = [];
     if (data) {
       data.forEach((field) => {
+        const defaultField = {};
+        if (this.defaultFields) {
+          this.defaultFields.find((item) => item.key === field);
+        }
         this.fields.push({
-          key: field
+          key: field,
+          ...defaultField
         });
       });
     }

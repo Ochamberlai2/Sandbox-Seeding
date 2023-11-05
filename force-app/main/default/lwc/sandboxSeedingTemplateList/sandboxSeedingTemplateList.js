@@ -10,4 +10,10 @@ export default class SandboxSeedingTemplateList extends LightningElement {
       this.seedingTemplates = data;
     }
   }
+
+  get hasRecords() {
+    return (
+      this.seedingTemplates !== undefined && this.seedingTemplates.length > 0
+    );
+  }
 }

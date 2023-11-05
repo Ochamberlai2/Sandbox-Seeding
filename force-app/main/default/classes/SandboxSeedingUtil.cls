@@ -54,7 +54,7 @@ public with sharing class SandboxSeedingUtil {
     'Chatterly'
   };
 
-  @AuraEnabled
+  @AuraEnabled(cacheable=true)
   public static List<Seeding_Template__mdt> getSeedingTemplates() {
     List<Seeding_Template__mdt> templates = new List<Seeding_Template__mdt>();
     try {

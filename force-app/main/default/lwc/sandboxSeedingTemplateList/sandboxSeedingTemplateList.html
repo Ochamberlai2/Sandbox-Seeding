@@ -1,14 +1,15 @@
 <template>
-  <template for:each={seedingTemplates} for:item="item">
-    <lightning-card title={item.Label} key={item.Id}>
-      <div class="slds-grid">
-        <p>Number of records</p>
-        <p>{item.Number_of_Records__c}</p>
-      </div>
-      <div class="slds-grid">
-        <p>Object Api Name</p>
-        <p>{item.Object_Api_Name__c}</p>
-      </div>
+  <template lwc:if={hasRecords}>
+    <lightning-card
+      class="slds-grid slds-grid_vertical small-gap"
+      title="Existing templates"
+    >
+      <template for:each={seedingTemplates} for:item="item">
+        <c-sandbox-seeding-template-list-item
+          key={item.Id}
+          seeding-template={item}
+        ></c-sandbox-seeding-template-list-item>
+      </template>
     </lightning-card>
   </template>
 </template>

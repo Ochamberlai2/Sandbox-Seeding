@@ -2,8 +2,19 @@ import { LightningElement, wire, track } from "lwc";
 import getObjects from "@salesforce/apex/SandboxSeedingUtil.getObjects";
 import seedSandbox from "@salesforce/apex/SandboxSeedingUtil.seedSandbox";
 import insertSeedingTemplate from "@salesforce/apex/CustomMetadataUtil.insertSeedingTemplate";
+import seedingTemplatePress from "@salesforce/messageChannel/seedingTemplatePress__c";
+
+import {
+  subscribe,
+  unsubscribe,
+  APPLICATION_SCOPE,
+  MessageContext
+} from "lightning/messageService";
 
 export default class SandboxSeeding extends LightningElement {
+  @wire(MessageContext)
+  messageContext;
+
   @wire(getObjects)
   objectsWire({ data, error }) {
     this.objects = { data, error };
@@ -23,9 +34,19 @@ export default class SandboxSeeding extends LightningElement {
   objectsOptions;
   selectedObject;
 
+  subscription = null;
+
   @track
   fields;
   numberOfRecords;
+
+  connectedCallback() {
+    this.subscribeToMessageChannel();
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeToMessageChannel();
+  }
 
   handleObjectSelect(event) {
     this.selectedObject = event.target.value;
@@ -38,6 +59,13 @@ export default class SandboxSeeding extends LightningElement {
   }
   handleFieldChange(event) {
     this.fields = event.detail;
+  }
+  handleMessage(event) {
+    const { label, numRecords, objectApiName, objectShape } = event;
+    this.selectedObject = objectApiName;
+    this.templateName = label;
+    this.numberOfRecords = numRecords;
+    this.fields = JSON.parse(objectShape);
   }
 
   createObjectTemplate() {
@@ -62,5 +90,21 @@ export default class SandboxSeeding extends LightningElement {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  subscribeToMessageChannel() {
+    if (!this.subscription) {
+      this.subscription = subscribe(
+        this.messageContext,
+        seedingTemplatePress,
+        (message) => this.handleMessage(message),
+        { scope: APPLICATION_SCOPE }
+      );
+    }
+  }
+
+  unsubscribeToMessageChannel() {
+    unsubscribe(this.subscription);
+    this.subscription = null;
   }
 }

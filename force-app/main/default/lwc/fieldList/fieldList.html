@@ -16,6 +16,7 @@
               options={typeOptions}
               label="data type"
               onchange={handleTypeSelect}
+              value={item.type}
             ></lightning-combobox>
             <template lwc:if={item.isSpecific}>
               <lightning-input
@@ -24,6 +25,7 @@
                 variant="label-hidden"
                 data-key={item.key}
                 onchange={handleSpecificValueChange}
+                value={item.specificValue}
               ></lightning-input>
             </template>
             <template lwc:if={item.hasObjectName}>

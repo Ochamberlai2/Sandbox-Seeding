@@ -1,0 +1,28 @@
+.space-between {
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: 700;
+}
+
+.icon-bg {
+  background: var(--background-colour);
+  width: 2rem;
+  aspect-ratio: 1/1;
+  border-radius: 25%;
+}
+
+.title {
+  display: flex;
+  gap: 1rem;
+
+  & h2 {
+    line-height: 2;
+  }
+}
+
+.slds-card_border-top {
+  border-top: 1px solid lightgrey;
+  border-radius: 0px;
+}
