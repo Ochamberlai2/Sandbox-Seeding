@@ -138,90 +138,155 @@ public with sharing class SandboxSeedingUtil {
       if (templates.isEmpty()) {
         return;
       }
-      List<SObject> objectsToCreate = new List<SObject>();
+      Map<SObject, Map<String, SObject>> objectsToCreate = new Map<SObject, Map<String, SObject>>();
       for (Seeding_Template__mdt template : templates) {
         if (template.Object_Shape__c == null) {
           continue;
         }
         for (Integer i = 0; i < template.Number_of_Records__c; i++) {
-          SObject objectToCreate = Schema.getGlobalDescribe()
-            .get(template.Object_Api_Name__c)
-            .newSObject();
-          objectsToCreate.add(objectToCreate);
           List<SandboxSeedingUtil.SeedingTemplateField> fields = (List<SandboxSeedingUtil.SeedingTemplateField>) JSON.deserialize(
             template.Object_Shape__c,
             List<SandboxSeedingUtil.SeedingTemplateField>.class
           );
-          if (fields.isEmpty()) {
-            continue;
-          }
+          List<SandboxSeedingUtil.SeedingTemplateField> lookupFields = new List<SandboxSeedingUtil.SeedingTemplateField>();
+          Map<String, SObject> lookupFieldObjects = new Map<String, SObject>();
+          //Find out if one of the fields is a lookup
           for (SandboxSeedingUtil.SeedingTemplateField field : fields) {
-            switch on field.type {
-              when 'CompanyName' {
-                objectToCreate.put(
-                  field.key,
-                  COMPANY_NAMES[
-                    Integer.valueOf(
-                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                    )
-                  ]
-                );
-              }
-              when 'FirstName' {
-                objectToCreate.put(
-                  field.key,
-                  FIRST_NAMES[
-                    Integer.valueOf(
-                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                    )
-                  ]
-                );
-              }
-              when 'LastName' {
-                objectToCreate.put(
-                  field.key,
-                  FIRST_NAMES[
-                    Integer.valueOf(
-                      Math.floor(Math.random() * ((FIRST_NAMES.size()) + 1))
-                    )
-                  ]
-                );
-              }
-              when 'Date' {
-                objectToCreate.put(field.key, Date.today());
-              }
-              when 'Number' {
-                objectToCreate.put(
-                  field.key,
-                  Math.floor(Math.random() * (10000) + 1)
-                );
-              }
-              when 'SpecificValue' {
-                objectToCreate.put(field.key, field.specificValue);
-              }
-              when else {
-                //Assume text
-                objectToCreate.put(field.key, 'Example Text');
-              }
+            if (field.type == 'Lookup') {
+              lookupFields.add(field);
             }
           }
+          //build a list of these to create
+          for (SandboxSeedingUtil.SeedingTemplateField field : lookupFields) {
+            lookupFieldObjects.put(
+              field.key,
+              createObject(
+                field.lookupObjectName,
+                JSON.serialize(field.lookupValue)
+              )
+            );
+          }
+          objectsToCreate.put(
+            createObject(template.Object_Api_Name__c, template.Object_Shape__c),
+            lookupFieldObjects
+          );
         }
       }
-      insert objectsToCreate;
+
+      List<SObject> lookupObjects = new List<SObject>();
+      //now we should have the map of objects to lookups. So we need to insert the lookups
+      //find the list of lookup records to create
+      for (Map<String, SObject> lookupMap : objectsToCreate.values()) {
+        lookupObjects.addAll(lookupMap.values());
+      }
+      insert lookupObjects;
+
+      //now we need to find the objects to update the lookup Ids of
+      for (SObject objectKey : objectsToCreate.keySet()) {
+        Map<String, SObject> insertedValues = objectsToCreate.get(objectKey);
+        for (String key : insertedValues.keySet()) {
+          objectKey.put(key, insertedValues.get(key).Id);
+        }
+      }
+      insert new List<SObject>(objectsToCreate.keySet());
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
+  }
+
+  @TestVisible
+  private static SObject createObject(
+    String objectApiName,
+    String objectShape
+  ) {
+    SObject objectToCreate = Schema.getGlobalDescribe()
+      .get(objectApiName)
+      .newSObject();
+
+    System.debug(objectShape);
+    List<SandboxSeedingUtil.SeedingTemplateField> fields = (List<SandboxSeedingUtil.SeedingTemplateField>) JSON.deserialize(
+      objectShape,
+      List<SandboxSeedingUtil.SeedingTemplateField>.class
+    );
+    if (fields.isEmpty()) {
+      return null;
+    }
+
+    for (SandboxSeedingUtil.SeedingTemplateField field : fields) {
+      switch on field.type {
+        when 'CompanyName' {
+          objectToCreate.put(
+            field.key,
+            COMPANY_NAMES[
+              Integer.valueOf(
+                Math.floor(Math.random() * ((FIRST_NAMES.size())))
+              )
+            ]
+          );
+        }
+        when 'FirstName' {
+          objectToCreate.put(
+            field.key,
+            FIRST_NAMES[
+              Integer.valueOf(
+                Math.floor(Math.random() * ((FIRST_NAMES.size())))
+              )
+            ]
+          );
+        }
+        when 'LastName' {
+          objectToCreate.put(
+            field.key,
+            FIRST_NAMES[
+              Integer.valueOf(Math.floor(Math.random() * ((LAST_NAMES.size()))))
+            ]
+          );
+        }
+        when 'Date' {
+          objectToCreate.put(field.key, Date.today());
+        }
+        when 'Number' {
+          objectToCreate.put(field.key, Crypto.getRandomInteger());
+        }
+        when 'SpecificValue' {
+          objectToCreate.put(field.key, field.specificValue);
+        }
+        // when 'Lookup' {
+        //   output.addAll(
+        //     createObject(
+        //       field.lookupObjectName,
+        //       JSON.serialize(field.lookupValue)
+        //     )
+        //   );
+        // }
+        when else {
+          //Assume text
+          objectToCreate.put(field.key, 'Example Text');
+        }
+      }
+    }
+    return objectToCreate;
   }
 
   public class SeedingTemplateField {
     public String type;
     public String key;
     public String specificValue;
+    public String lookupObjectName;
+    public List<SeedingTemplateField> lookupValue;
 
-    SeedingTemplateField(String type, String key, String specificValue) {
+    SeedingTemplateField(
+      String type,
+      String key,
+      String specificValue,
+      String lookupObjectName,
+      List<SeedingTemplateField> lookupValue
+    ) {
       this.type = type;
       this.key = key;
       this.specificValue = specificValue;
+      this.lookupObjectName = lookupObjectName;
+      this.lookupValue = lookupValue;
     }
   }
 }
