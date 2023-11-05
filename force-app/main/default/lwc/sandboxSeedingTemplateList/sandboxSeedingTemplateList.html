@@ -1,0 +1,14 @@
+<template>
+  <template for:each={seedingTemplates} for:item="item">
+    <lightning-card title={item.Label} key={item.Id}>
+      <div class="slds-grid">
+        <p>Number of records</p>
+        <p>{item.Number_of_Records__c}</p>
+      </div>
+      <div class="slds-grid">
+        <p>Object Api Name</p>
+        <p>{item.Object_Api_Name__c}</p>
+      </div>
+    </lightning-card>
+  </template>
+</template>

@@ -54,6 +54,25 @@ public with sharing class SandboxSeedingUtil {
     'Chatterly'
   };
 
+  @AuraEnabled
+  public static List<Seeding_Template__mdt> getSeedingTemplates() {
+    List<Seeding_Template__mdt> templates = new List<Seeding_Template__mdt>();
+    try {
+      templates = [
+        SELECT
+          Id,
+          Label,
+          Object_Shape__c,
+          Number_of_Records__c,
+          Object_Api_Name__c
+        FROM Seeding_Template__mdt
+      ];
+    } catch (Exception e) {
+      throw new AuraHandledException(e.getMessage());
+    }
+    return templates;
+  }
+
   @AuraEnabled(cacheable=true)
   public static List<String> getFields(String selectedObject) {
     if (String.isEmpty(selectedObject)) {
