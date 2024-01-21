@@ -1,0 +1,47 @@
+<template>
+  <lightning-card title="Seed a sandbox">
+    <span slot="actions" class="slds-grid slds-gutters_xx-small">
+      <lightning-button
+        class="slds-col"
+        variant="brand"
+        label="Create object template"
+        onclick={createObjectTemplate}
+      ></lightning-button>
+      <lightning-button
+        class="slds-col"
+        variant="brand"
+        label="Seed sandbox"
+        onclick={seedSandbox}
+      ></lightning-button>
+    </span>
+    <span class="slds-grid slds-gutters_xx-small">
+      <lightning-input
+        label="Template name"
+        class="slds-var-m-around_medium slds-col"
+        onchange={handleTemplateNameChange}
+        value={templateName}
+      ></lightning-input>
+      <lightning-input
+        label="Number of records"
+        class="slds-var-m-around_medium slds-col"
+        type="number"
+        max="20"
+        onchange={handleNumberRecordsChange}
+        value={numberOfRecords}
+      ></lightning-input>
+    </span>
+    <lightning-combobox
+      options={objectsOptions}
+      label="Object"
+      onchange={handleObjectSelect}
+      value={selectedObject}
+      class="slds-var-m-around_medium"
+    ></lightning-combobox>
+
+    <c-field-list
+      selected-object={selectedObject}
+      default-fields={fields}
+      onfieldchange={handleFieldChange}
+    ></c-field-list>
+  </lightning-card>
+</template>

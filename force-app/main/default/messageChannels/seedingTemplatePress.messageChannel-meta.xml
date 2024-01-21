@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Seeding Template Press</masterLabel>
+    <isExposed>true</isExposed>
+    <description
+  >Called to communicate a seeding template has been pressed in the sidebar.</description>
+    <lightningMessageFields>
+        <fieldName>label</fieldName>
+        <description>Label of the custom metadata</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>numRecords</fieldName>
+        <description>The number of records to be created</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>objectApiName</fieldName>
+        <description>The object's api name</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>objectShape</fieldName>
+        <description>The shape of the object</description>
+    </lightningMessageFields>
+</LightningMessageChannel>
