@@ -1,0 +1,65 @@
+- snowfakery_version: 3
+- object: Account
+  count: 5
+  fields: 
+    RecordType: PersonAccount
+    FirstName:
+      fake: FirstName
+    LastName:
+      fake: LastName
+    PersonEmail:
+      fake: Email
+    PersonBirthdate:
+      date_between:
+        start_date: '1950-01-01'
+        end_date: '2000-01-01'
+  friends:
+    - object: Trade__c
+      count: 2
+      fields: 
+        Customer__c: 
+          reference: Account
+        To_Deposit_Account__c:
+          - object: Deposit_Account__c
+            fields: 
+              Customer__c:
+                reference: Account
+              Currency__c: 
+                random_choice:
+                  - choice:
+                    probability: 33%
+                    pick: USD
+                  - choice: 
+                    probability: 33%
+                    pick: GBP
+                  - choice: 
+                    probability: 33%
+                    pick: ILS
+              Name: ${{Customer__c.FirstName}} ${{Customer__c.LastName}} - ${{Currency__c}}
+              Balance__c: 
+                random_number:
+                  min: 20000
+                  max: 5000000
+        From_Deposit_Account__c:
+          - object: Deposit_Account__c
+            fields: 
+              Customer__c: 
+                reference: Account
+              Currency__c: 
+                random_choice:
+                  - choice:
+                    probability: 33%
+                    pick: USD
+                  - choice: 
+                    probability: 33%
+                    pick: GBP
+                  - choice: 
+                    probability: 33%
+                    pick: ILS
+              Name: ${{Customer__c.FirstName}} ${{Customer__c.LastName}} - ${{Currency__c}}
+              Balance__c: 
+                random_number:
+                  min: 20000
+                  max: 5000000
+              Customer__c:
+                reference: Account

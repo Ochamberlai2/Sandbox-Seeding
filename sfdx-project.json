@@ -1,11 +1,17 @@
 {
   "packageDirectories": [
     {
-      "path": "force-app",
+      "path": "force-app/default/main",
       "default": true
+    },
+    {
+      "path": "force-app/seeding"
+    },
+    {
+      "path": "force-app/finance-org"
     }
   ],
-  "name": "Sandbox-Seeding",
+  "name": "oc-personal",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0"

@@ -1,13 +1,14 @@
 {
-  "orgName": "Demo company",
-  "edition": "Developer",
-  "features": ["EnableSetPasswordInApi"],
-  "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "mobileSettings": {
-      "enableS1EncryptedStoragePref2": false
+  "orgName": "Demo Company",
+  "edition": "Enterprise",
+  "features": ["PersonAccounts", "Knowledge", "ServiceCloud", "Entitlements", "AuthorApex", "Communities", "DefaultWorkflowUser", "MarketingUser"],
+    "settings": {
+      "nameSettings": {
+        "enableMiddleName": true,
+        "enableNameSuffix": true
+      },
+      "chatterSettings": {
+        "enableChatter": true
+      }
     }
   }
-}
