@@ -6,9 +6,6 @@
     },
     {
       "path": "force-app/seeding"
-    },
-    {
-      "path": "force-app/finance-org"
     }
   ],
   "name": "oc-personal",
