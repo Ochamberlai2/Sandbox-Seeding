@@ -3,9 +3,6 @@
     {
       "path": "force-app/main/default",
       "default": true
-    },
-    {
-      "path": "force-app/seeding"
     }
   ],
   "name": "oc-personal",
