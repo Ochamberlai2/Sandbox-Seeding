@@ -19,3 +19,4 @@
 .sf
 .vscode
 node_modules
+jest.config.js
