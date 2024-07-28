@@ -16,3 +16,4 @@
 .sfdx
 .husky
 .github
+node_modules
