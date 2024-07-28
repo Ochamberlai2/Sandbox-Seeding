@@ -14,4 +14,8 @@
 **/aura/**/*.xml
 **/aura/**/*.app
 .sfdx
+.github
+.husky
+.sf
+.vscode
 node_modules
