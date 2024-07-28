@@ -1,5 +1,7 @@
 {
-  "overrides": {
-    "files": ["force-app/**/lwc/*.js"]
-  }
+  "overrides": [
+    {
+      "files": ["force-app/**/lwc/*.js"]
+    }
+  ]
 }
