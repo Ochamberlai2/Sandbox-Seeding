@@ -1,0 +1,2 @@
+- name: Run Linting
+  uses: wearerequired/lint-action@v2.3.0
