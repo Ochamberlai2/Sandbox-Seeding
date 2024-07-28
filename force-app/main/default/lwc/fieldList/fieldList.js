@@ -41,6 +41,9 @@ export default class FieldList extends LightningElement {
         });
       });
     }
+    if (error) {
+      console.log(error);
+    }
   }
 
   async handleTypeSelect(event) {
@@ -79,7 +82,7 @@ export default class FieldList extends LightningElement {
     const { key } = event.target.dataset;
     const field = this.fields.find((item) => item.key === key);
     if (field) {
-      const result = await configureLookupModal.open({
+      await configureLookupModal.open({
         size: "large",
         selectedObject: field.lookupObjectName,
         relatedField: key,
