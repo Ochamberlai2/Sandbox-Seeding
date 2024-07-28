@@ -6,5 +6,6 @@
 .localdevserver
 .sfdx
 .vscode
-
+.husky
+.github
 coverage/
